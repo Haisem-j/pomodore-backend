@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-const DB_CONNECTION = "mongodb+srv://jhaisem:adamnadia@pomodore.y08ae.mongodb.net/pomodore?retryWrites=true&w=majority";
+dotenv.config();
+
 const connection = mongoose.createConnection(
-    DB_CONNECTION,
+    process.env.DB_CONNECT,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
