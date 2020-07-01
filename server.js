@@ -6,6 +6,7 @@ const port = 3000
 
 // import routes
 const authRoute = require('./routes/auth');
+const postRoute = require('./routes/posts');
 
 // Middlewares
 app.use(express.json());
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route Middleware
 app.use('/api/user', authRoute);
+app.use('/api/posts', postRoute);
 
 
 

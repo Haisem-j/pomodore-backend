@@ -2,16 +2,17 @@ const router = require('express').Router()
 const User = require('../models/User');
 const schema = require('../validation/validation');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 router.post('/register', async (req, res) => {
 
     // validate data
     const { error } = schema.validate(req.body)
-    if(!error){
-        
+    if (!error) {
+
         // Check if username exists in database
-        const userExists = await User.findOne({username: req.body.username});
-        if(userExists){
+        const userExists = await User.findOne({ username: req.body.username });
+        if (userExists) {
             return res.status(400).send('User exists')
         }
 
@@ -24,7 +25,7 @@ router.post('/register', async (req, res) => {
             username: req.body.username,
             password: hashPassword
         })
-    
+
         // Save user to database
         try {
             const savedUser = await user.save()
@@ -32,15 +33,35 @@ router.post('/register', async (req, res) => {
         } catch (error) {
             res.status(400).send(error)
         }
-    }else{
+    } else {
         res.status(400).send(error.details);
     }
-
-
-
 })
 
+router.post('/login', async (req, res) => {
 
-router.post
+    // validate data
+    const { error } = schema.validate(req.body);
+    if (!error) {
+
+        const user = await User.findOne({ username: req.body.username });
+        //Check if username exists in database
+        if (!user) {
+            res.status(400).send('Username doesnt exist');
+        }
+        //Check password
+        const validPass = await bcrypt.compare(req.body.password, user.password);
+        if (!validPass) {
+            res.status(400).send('Password doesnt exist');
+        } else {
+            //Create and sign a token
+            const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+            res.header('auth-token', token).send(token);
+        }
+
+    } else {
+        res.status(400).send(error.details)
+    }
+})
 
 module.exports = router;
