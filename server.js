@@ -1,14 +1,16 @@
 const express = require('express')
+var cors = require('cors')
 const app = express()
 
 // Port
-const port = 3000
+const port = 5000
 
 // import routes
 const authRoute = require('./routes/auth');
 const postRoute = require('./routes/posts');
 
 // Middlewares
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
