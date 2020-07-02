@@ -3,6 +3,10 @@ const verify = require('./verifyToken');
 const Day = require('../models/Day');
 
 
+router.get('/', verify, async (req,res) =>{
+    
+})
+
 router.post('/postOne', verify, async (req, res) => {
 
     /*
@@ -50,5 +54,7 @@ router.post('/post', async (req,res) =>{
         
     }
 })
+
+
 
 module.exports = router;
