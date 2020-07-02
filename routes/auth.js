@@ -55,8 +55,16 @@ router.post('/login', async (req, res) => {
             res.status(400).send('Password doesnt exist');
         } else {
             //Create and sign a token
-            const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-            res.header('auth-token', token).send(token);
+            const token = jwt.sign({
+                _id: user._id
+            },
+                process.env.TOKEN_SECRET,
+                {
+                    expiresIn: 60 * 15
+                });
+            let currentDate = new Date();
+            let expiryDate = new Date(currentDate.getTime() + (60 * 60 * 1000));
+            res.header('auth-token', token).json({ token: token, expiresIn: expiryDate, username: req.body.username })
         }
 
     } else {

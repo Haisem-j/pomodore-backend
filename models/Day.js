@@ -11,7 +11,7 @@ const daySchema = new mongoose.Schema({
         required: true
     },
     UserID: {
-        type: Number,
+        type: String,
         required: true
     }
 })
