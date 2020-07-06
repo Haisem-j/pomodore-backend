@@ -3,7 +3,7 @@ const verify = require('./verifyToken');
 const Day = require('../models/Day');
 
 
-router.post('/', verify, async (req,res) =>{
+router.post('/', verify, async (req, res) => {
     /*
         This route will be called when user first logs in and everytime a user finishes 25min.
         1. Check to see if current day exists
@@ -19,10 +19,29 @@ router.post('/', verify, async (req,res) =>{
 
     try {
         const dayExists = await Day.findOne({ UserID: req.username._id, Day: req.body.curDate })
-        if(dayExists){
-            res.send({tomatos: dayExists.tomato})
+        const allDays = await Day.find({ UserID: req.username._id })
+
+        let allDates = [];
+        if (dayExists && allDays) {
+            allDays.map(item => {
+                allDates.push({
+                    tomato: item.tomato,
+                    Day: item.Day
+                })
+            })
+            let finalDates = allDates.filter(item => item.Day !== req.body.curDate)
+            res.send({ tomatos: dayExists.tomato, allDays: finalDates })
+        } else if (!dayExists && allDays) {
+            allDays.map(item => {
+                allDates.push({
+                    tomato: item.tomato,
+                    Day: item.Day
+                })
+            })
+            let finalDates = allDates.filter(item => item.Day !== req.body.curDate)
+            res.send({ tomatos: 0, allDays: finalDates })
         }else{
-            res.send({tomatos: 0})
+            res.send({ tomatos: 0, allDays: [] })
         }
     } catch (error) {
         res.status(400).send(error)
@@ -43,26 +62,26 @@ router.post('/postOne', verify, async (req, res) => {
     */
     try {
         const dayExists = await Day.findOne({ UserID: req.username._id, Day: req.body.curDate })
-        if(!dayExists){
+        if (!dayExists) {
             const post = new Day({
                 tomato: 1,
                 Day: req.body.curDate,
                 UserID: req.username._id
             })
             const savedPost = await post.save();
-            res.send({message: 'Updated 1'});
-        }else{
+            res.send({ message: 'Updated 1' });
+        } else {
             dayExists.tomato += 1;
             const savedPost = dayExists.save();
-            res.send({message: 'Updated 1'});
+            res.send({ message: 'Updated 1' });
         }
     } catch (error) {
         res.status(400).send(error)
     }
 })
 
-router.post('/testPost', async (req,res) =>{
-    
+router.post('/testPost', async (req, res) => {
+
     const post = new Day({
         tomato: 0,
         Day: '05/07/2020',
@@ -74,7 +93,7 @@ router.post('/testPost', async (req,res) =>{
         res.send(savedPost);
     } catch (error) {
         res.status(400).send(error)
-        
+
     }
 })
 
