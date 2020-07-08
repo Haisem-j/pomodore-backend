@@ -18,6 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/user', authRoute);
 app.use('/api/posts', postRoute);
 
+app.get('/', (req,res)=>{
+    res.send('Digital Ocean Works');
+})
 
 
 
