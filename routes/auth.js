@@ -60,7 +60,7 @@ router.post('/login', async (req, res) => {
             },
                 process.env.TOKEN_SECRET,
                 {
-                    expiresIn: 60 * 15
+                    expiresIn: 60 * 720
                 });
             let currentDate = new Date();
             let expiryDate = new Date(currentDate.getTime() + (60 * 60 * 1000));
