@@ -3,7 +3,7 @@ var cors = require('cors')
 const app = express()
 
 // Port
-const port = 5000
+const port = 5000 || process.env.port
 
 // import routes
 const authRoute = require('./routes/auth');
