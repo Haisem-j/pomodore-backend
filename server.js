@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan');
 var cors = require('cors')
 const app = express()
 
@@ -15,9 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Route Middleware
+app.use(morgan('common'));
 app.use('/api/user', authRoute);
 app.use('/api/posts', postRoute);
 
+
+// Test Route
 app.get('/', (req,res)=>{
     res.send('Digital Ocean Works');
 })
