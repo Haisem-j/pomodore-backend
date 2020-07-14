@@ -66,7 +66,7 @@ router.post('/register', async (req, res) => {
  * It will login the user and send them a json web token
  * 
  * How does it work
- * as
+ * asd
  */
 
 router.post('/login', async (req, res) => {
